@@ -27,24 +27,27 @@ function start() {
 
 
 start();
-var remainingLetters = word.length
+
 function checkLetter() {
   document.onkeyup = function(event) {
     guess = event.key.toLowerCase();
+    if (!(event.which <= 90 && event.which >= 65)) return
     var found = false;
     for (i = 0; i < word.length; i++) {
       if (guess === word[i]) {
-      	remainingLetters--;
-        letters[i] = guess;
+      	var audio = new Audio('assets/sounds/correct.wav');
+		audio.play();
+		letters[i] = guess;
         letters.join(" ");
         document.getElementById("user-text").innerHTML = letters.join(" ");
         document.getElementById("event").innerHTML = "";
 		found = true;
-		console.log(remainingLetters)
 		console.log(letters[i])
 
 			if (letters.join('') == word) {
 			wins++;
+			var audio = new Audio('assets/sounds/win.mp3');
+		    audio.play();
 			document.getElementById("event").innerHTML = ("You Win!");
 			document.getElementById("score").innerHTML = ("wins " + wins);
 			counter = 7;
@@ -53,7 +56,7 @@ function checkLetter() {
             wrongLetters = [];
             document.getElementById("guessed").innerHTML = wrongLetters;
        		start();
-       		remainingLetters = word.length;
+
           }
         
       }
@@ -62,6 +65,8 @@ function checkLetter() {
     if (found) return;
     if (wrongLetters.indexOf(guess) < 0) {
       wrongLetters.push(guess);
+      var audio = new Audio('assets/sounds/wrong.mp3');
+	  audio.play();
       document.getElementById("event").innerHTML = "";
       document.getElementById("guessed").innerHTML = wrongLetters.join(" ");
       counter--;
@@ -69,7 +74,9 @@ function checkLetter() {
       // console.log(counter);
       if (counter === 0) {
       	losses++
-      	document.getElementById("event").innerHTML = ("You Lost!");
+      	var audio = new Audio('assets/sounds/loss.wav');
+		audio.play();
+      	document.getElementById("event").innerHTML = ("You Lost! The word was " + word);
         document.getElementById("losses").innerHTML = ("Losses " + losses);
         // console.log(losses);
 		counter = 7;
@@ -78,7 +85,7 @@ function checkLetter() {
         wrongLetters = [];
         document.getElementById("guessed").innerHTML = wrongLetters;
         start();
-        remainingLetters = word.length;
+
       }
     }
   }
@@ -87,5 +94,3 @@ function checkLetter() {
 
 checkLetter();
 
-
-//remainingLetters === 0
